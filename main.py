@@ -223,8 +223,5 @@ while True:
             window["-FILE LIST-"].update(values)
             text = obj.file
             window["-PATH-"].update(text)
-    if event == "-DEL-":
-        print("del")
-        # de tratat
 
 window.close()
