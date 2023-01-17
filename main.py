@@ -9,6 +9,7 @@ class Tree:
         self.file = file
         self.children = []
         self.parent = parent
+        self.is_selected = False
 
     def __str__(self):
         return os.path.basename(self.file)
@@ -29,6 +30,15 @@ class Tree:
         for c in self.children:
             ch.append(c)
         return ch
+
+    def deselect_children(self):
+        for c in self.children:
+            c.is_selected = False
+
+    def get_selected(self):
+        for c in self.children:
+            if c.is_selected:
+                return c
 
 
 start = "test"
@@ -177,11 +187,10 @@ names = tree.get_children()
 
 file_list_column = [
     [sg.Listbox(values=names, enable_events=True, size=(80, 40), key="-FILE LIST-",
-                right_click_menu=['Unused', ['Cut', 'Copy', 'Delete', 'Rename', 'Paste', 'Properties']])],
+                right_click_menu=['Unused', ['New Folder', 'New File', 'Cut', 'Copy', 'Delete', 'Rename', 'Paste', 'Properties']])],
 ]
 
-button_column = [[sg.Button("UP", key="-UP-")],
-                 [sg.Button("DEL", key="-DEL-")]]
+button_column = [[sg.Button("UP", key="-UP-")],]
 
 layout = [[sg.Text(text=".", key="-PATH-", ), ],
           [sg.Column(file_list_column),
@@ -197,13 +206,16 @@ while True:
         break
     if event == "-FILE LIST-":
         obj = values["-FILE LIST-"][0]
-        if len(obj.children) != 0:
-            values = obj.get_children()
-            window["-FILE LIST-"].update(values)
-            text = obj.file
-            window["-PATH-"].update(text)
+        if obj.is_selected:
+            if len(obj.children) != 0:
+                values = obj.get_children()
+                window["-FILE LIST-"].update(values)
+                text = obj.file
+                window["-PATH-"].update(text)
+            obj.is_selected = False
         else:
-            obj = obj.parent
+            obj.parent.deselect_children()
+            obj.is_selected = True
     if event == "-UP-":
         if obj.parent is not None:
             obj = obj.parent
