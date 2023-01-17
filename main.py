@@ -176,18 +176,17 @@ def copy_folder(path, name, new_path):
 names = tree.get_children()
 
 file_list_column = [
-    [sg.Text(text=".", key="-PATH-", ),
-     sg.Listbox(values=names, enable_events=True, size=(80, 40), key="-FILE LIST-",
+    [sg.Listbox(values=names, enable_events=True, size=(80, 40), key="-FILE LIST-",
                 right_click_menu=['Unused', ['Cut', 'Copy', 'Delete', 'Rename', 'Paste', 'Properties']])],
 ]
 
 button_column = [[sg.Button("UP", key="-UP-"),
                   sg.Button("DEL", key="-DEL-")]]
 
-layout = [
-    [sg.Column(file_list_column),
-     sg.VSeperator(), sg.Column(button_column), ]
-]
+layout = [[sg.Text(text=".", key="-PATH-", ), ],
+          [sg.Column(file_list_column),
+           sg.VSeperator(), sg.Column(button_column), ]
+          ]
 
 window = sg.Window('Tree Element Test', layout, resizable=True, finalize=True)
 
