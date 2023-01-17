@@ -181,12 +181,12 @@ file_list_column = [
                 right_click_menu=['Unused', ['Cut', 'Copy', 'Delete', 'Rename', 'Paste', 'Properties']])],
 ]
 
-button_column = [[sg.Button("UP", key="-UP-"),
-                  sg.Button("DEL", key="-DEL-")]]
+button_column = [[sg.Button("UP", key="-UP-")],
+                 [sg.Button("DEL", key="-DEL-")]]
 
 layout = [
     [sg.Column(file_list_column),
-     sg.VSeperator(), sg.Column(button_column), ]
+     sg.VSeperator(), sg.Column(button_column, vertical_alignment='top'), ]
 ]
 
 window = sg.Window('Tree Element Test', layout, resizable=True, finalize=True)
