@@ -11,7 +11,7 @@ class Tree:
         self.parent = parent
 
     def __str__(self):
-        return self.file
+        return os.path.basename(self.file)
 
     def add_child(self, child):
         self.children.append(child)
