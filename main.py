@@ -262,7 +262,7 @@ if __name__ == '__main__':
                     right_click_menu=['Unused', ['Open', 'New Folder', 'New File', 'Cut', 'Copy', 'Delete', 'Rename', 'Paste']])],
     ]
 
-    button_column = [[sg.Button("UP", key="-UP-")], [sg.Button("GAME", key ="-GAME-")],]
+    button_column = [[sg.Button("UP", key="-UP-")], [sg.HSeparator()], [sg.Button("GAME", key ="-GAME-")],]
 
     layout = [[sg.Text(text=".", key="-PATH-", ), ],
               [sg.Column(file_list_column),
