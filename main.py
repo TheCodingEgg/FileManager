@@ -190,7 +190,7 @@ def copy_file(path, name, new_path):
     try:
         os.chdir(dir_path)
         shutil.copy2(os.path.join(path),
-                     os.path.join(new_path + "\\" + name))
+                     os.path.join(new_path, name))
         os.chdir(dir_path)
     except (FileNotFoundError, IOError) as e:
         print(e, sys.stderr)
@@ -200,7 +200,7 @@ def copy_folder(path, name, new_path):
     try:
         os.chdir(dir_path)
         shutil.copytree(os.path.join(path),
-                        os.path.join(new_path + "\\" + name))
+                        os.path.join(new_path, name))
         os.chdir(dir_path)
     except (FileNotFoundError, IOError) as e:
         print(e, sys.stderr)
