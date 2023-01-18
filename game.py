@@ -110,7 +110,7 @@ class Enemy(pygame.sprite.Sprite):
                 enemies.remove(self)
                 
                 
-if __name__ == '__main__':
+def game():
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     player = Player()
@@ -183,3 +183,6 @@ if __name__ == '__main__':
         pygame.display.flip()
         clock.tick(60)
     print("Your score is", pygame.time.get_ticks())
+
+if __name__ == '__main__':
+    game()

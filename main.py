@@ -3,6 +3,7 @@ import sys
 import shutil
 import PySimpleGUI as sg
 import subprocess
+import game
 
 
 class Tree:
@@ -261,7 +262,7 @@ if __name__ == '__main__':
                     right_click_menu=['Unused', ['Open', 'New Folder', 'New File', 'Cut', 'Copy', 'Delete', 'Rename', 'Paste']])],
     ]
 
-    button_column = [[sg.Button("UP", key="-UP-")], ]
+    button_column = [[sg.Button("UP", key="-UP-")], [sg.Button("GAME", key ="-GAME-")],]
 
     layout = [[sg.Text(text=".", key="-PATH-", ), ],
               [sg.Column(file_list_column),
@@ -409,5 +410,8 @@ if __name__ == '__main__':
                 subprocess.Popen([selected.file], shell=True)
             else:
                 message_box("Can't open a directory", "Warning")
-
+                
+        if event == "-GAME-":
+            subprocess.Popen([sys.executable, "game.py"])
+            
     window.close()
