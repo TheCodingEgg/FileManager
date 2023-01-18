@@ -10,6 +10,7 @@ class Tree:
         self.children = []
         self.parent = parent
         self.is_selected = False
+        self.cut = False
 
     def __str__(self):
         return os.path.basename(self.file)
@@ -190,8 +191,8 @@ def move_folder(path, name, new_path):
 
 def copy_file(path, name, new_path):
     try:
-        os.chdir(path)
-        shutil.copy2(name, new_path)
+        os.chdir(dir_path)
+        shutil.copy2(os.path.join(path + "\\" + name), os.path.join(new_path + "\\" + name))
         os.chdir(dir_path)
     except (FileNotFoundError, IOError) as e:
         print(e, sys.stderr)
@@ -199,8 +200,8 @@ def copy_file(path, name, new_path):
 
 def copy_folder(path, name, new_path):
     try:
-        os.chdir(path)
-        shutil.copytree(name, os.path.join(new_path + "\\" + name))
+        os.chdir(dir_path)
+        shutil.copytree(os.path.join(path + "\\" + name), os.path.join(new_path + "\\" + name))
         os.chdir(dir_path)
     except (FileNotFoundError, IOError) as e:
         print(e, sys.stderr)
@@ -251,6 +252,7 @@ layout = [[sg.Text(text=".", key="-PATH-", ), ],
 window = sg.Window('File Manager', layout, resizable=True, finalize=True)
 
 obj = tree
+copy = None
 while True:
     event, values = window.read()
     if event in (sg.WIN_CLOSED, 'Cancel'):
@@ -295,16 +297,54 @@ while True:
         obj = tree.find_file(obj.parent.file)
         refresh(obj)
     if event == 'New File':
+        if not os.path.isdir(obj.file):
+            obj = obj.parent
         path = obj.file
         create_file(path, get_input())
         tree = rebuild()
         obj = tree.find_file(obj.file)
         refresh(obj)
     if event == 'New Folder':
+        if not os.path.isdir(obj.file):
+            obj = obj.parent
         path = obj.file
         create_folder(path, get_input())
         tree = rebuild()
         obj = tree.find_file(obj.file)
         refresh(obj)
-
+    if event == 'Copy':
+        copy = obj
+    if event == 'Cut':
+        copy = obj
+        copy.cut = True
+    if event == 'Paste':
+        if copy is None:
+            continue
+        if copy.parent is None:
+            print("You can't copy the starting folder.")
+            continue
+        if os.path.isdir(copy.file):
+            if not os.path.isdir(obj.file):
+                obj = obj.parent
+            print("folder", copy.parent.file, copy, obj.file)
+            copy_folder(copy.parent.file, copy.__str__(), obj.file)
+        else:
+            if not os.path.isdir(obj.file):
+                obj = obj.parent
+            print("file", copy.parent.file, copy, obj.file)
+            copy_file(copy.parent.file, copy.__str__(), obj.file)
+        if copy.cut is False:
+            tree = rebuild()
+            obj = tree.find_file(obj.file)
+            refresh(obj)
+        else:
+            path = copy.parent.file
+            item = os.path.join(path, copy.__str__())
+            if os.path.isdir(item):
+                delete_folder(path, os.path.basename(item))
+            else:
+                delete_file(path, os.path.basename(item))
+            tree = rebuild()
+            obj = tree.find_file(obj.file)
+            refresh(obj)
 window.close()
