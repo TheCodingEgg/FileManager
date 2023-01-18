@@ -43,6 +43,16 @@ class Tree:
     def get_file(self):
         return self.file
 
+    def find_file(self, file):
+        if self.file == file:
+            return self
+        else:
+            if len(self.children) != 0:
+                for c in self.children:
+                    res = c.find_file(file)
+                    if res is not None:
+                        return res
+
 
 start = "test"
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -215,6 +225,13 @@ def get_input():
     return ret
 
 
+def refresh(obj_temp):
+    values_temp = obj_temp.get_children()
+    window["-FILE LIST-"].update(values_temp)
+    text_temp = obj_temp.file
+    window["-PATH-"].update(text_temp)
+
+
 names = tree.get_children()
 
 file_list_column = [
@@ -240,10 +257,7 @@ while True:
         obj = values["-FILE LIST-"][0]
         if obj.is_selected:
             if len(obj.children) != 0:
-                values = obj.get_children()
-                window["-FILE LIST-"].update(values)
-                text = obj.file
-                window["-PATH-"].update(text)
+                refresh(obj)
             obj.is_selected = False
         else:
             obj.parent.deselect_children()
@@ -251,10 +265,7 @@ while True:
     if event == "-UP-":
         if obj.parent is not None:
             obj = obj.parent
-            values = obj.get_children()
-            window["-FILE LIST-"].update(values)
-            text = obj.file
-            window["-PATH-"].update(text)
+            refresh(obj)
     if event == 'Rename':
         path = obj.parent.file
         item = os.path.join(obj.parent.file, obj.parent.get_selected().__str__())
@@ -267,10 +278,7 @@ while True:
         add_dir(tree1, start)
         tree = tree1
         tree.print_tree()
-        # values = obj.parent.get_children()
-        # window["-FILE LIST-"].update(values)
-        # text = obj.file
-        # window["-PATH-"].update(text)
-        #tbd
+        obj = tree.find_file(obj.parent.file)
+        refresh(obj)
 
 window.close()
