@@ -1,4 +1,3 @@
-# Import the pygame module
 from math import sqrt
 import random
 
@@ -69,7 +68,6 @@ class Projectile(pygame.sprite.Sprite):
     def __init__(self, player, speed):
         super(Projectile, self).__init__()
         self.surf = pygame.Surface((5, 5))
-        #self.surf.fill((0, 0, 255))
         self.image = pygame.image.load(".\\Assets\\bullet.png").convert()
         self.rect = self.image.get_rect()
         self.speed = speed
