@@ -1,6 +1,10 @@
 FROM accetto/ubuntu-vnc-xfce-python-g3
 
 ADD main.py .
+ADD game.py .
+COPY Assets /srv/projects/Assets
+COPY test /srv/projects/test
+
 USER root
 RUN adduser --disabled-password --gecos '' docker
 RUN adduser docker sudo
