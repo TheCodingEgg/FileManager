@@ -288,8 +288,8 @@ if __name__ == '__main__':
                 if os.path.isdir(selected.file):
                     current_directory = selected
                     refresh(selected)
-                selected.is_selected = False
-                selected = None
+                    selected.is_selected = False
+                    selected = None
             else:
                 current_directory.deselect_children()
                 selected.is_selected = True
@@ -341,13 +341,13 @@ if __name__ == '__main__':
                 message_box("You must input a name!", "Warning")
                 continue
 
-            filename = name
+            filename, extension = os.path.splitext(name)
             i = 1
-            while file_exists(current_directory, filename):
-                filename = name + " (" + str(i) + ")"
+            while file_exists(current_directory, filename + extension):
+                filename = os.path.splitext(name)[0] + " (" + str(i) + ")"
                 i += 1
 
-            create_file(path, filename)
+            create_file(path, filename + extension)
             tree = rebuild()
             current_directory = tree.find_file(current_directory.file)
             selected = None
@@ -373,9 +373,13 @@ if __name__ == '__main__':
             refresh(current_directory)
 
         if event == 'Copy':
+            if selected is None:
+                continue
             copy = selected
 
         if event == 'Cut':
+            if selected is None:
+                continue
             copy = selected
             copy.was_cut = True
 
@@ -387,17 +391,17 @@ if __name__ == '__main__':
                 print("You can't copy the starting folder.")
                 continue
 
-            filename = os.path.basename(copy.file)
+            filename, extension = os.path.splitext(os.path.basename(copy.file))
             i = 1
-            while file_exists(current_directory, filename):
-                filename = os.path.basename(copy.file) + " (" + str(i) + ")"
+            while file_exists(current_directory, filename + extension):
+                filename = os.path.splitext(os.path.basename(copy.file))[0]
+                + " (" + str(i) + ")"
                 i += 1
-
             if os.path.isdir(copy.file):
-                copy_folder(copy.file, filename,
+                copy_folder(copy.file, filename + extension,
                             current_directory.file)
             else:
-                copy_file(copy.file, filename,
+                copy_file(copy.file, filename + extension,
                           current_directory.file)
 
             if copy.was_cut is False:
@@ -419,6 +423,8 @@ if __name__ == '__main__':
                 copy = None
 
         if event == 'Open':
+            if selected is None:
+                continue
             if not os.path.isdir(selected.file):
                 subprocess.Popen([selected.file], shell=True)
             else:
