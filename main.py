@@ -55,6 +55,13 @@ class Tree:
                         return res
 
 
+def file_exists(directory: Tree, name: str):
+    for child in directory.get_children():
+        if os.path.basename(child.file) == name:
+            return True
+    return False
+
+
 def list_directories(path, tab_count):
     if not os.path.isdir(path):
         print("\t" * (tab_count - 1) + os.path.basename(path))
@@ -180,7 +187,7 @@ def move_folder(path, name, new_path):
 def copy_file(path, name, new_path):
     try:
         os.chdir(dir_path)
-        shutil.copy2(os.path.join(path + "\\" + name),
+        shutil.copy2(os.path.join(path),
                      os.path.join(new_path + "\\" + name))
         os.chdir(dir_path)
     except (FileNotFoundError, IOError) as e:
@@ -190,7 +197,7 @@ def copy_file(path, name, new_path):
 def copy_folder(path, name, new_path):
     try:
         os.chdir(dir_path)
-        shutil.copytree(os.path.join(path + "\\" + name),
+        shutil.copytree(os.path.join(path),
                         os.path.join(new_path + "\\" + name))
         os.chdir(dir_path)
     except (FileNotFoundError, IOError) as e:
@@ -339,13 +346,19 @@ if __name__ == '__main__':
                 print("You can't copy the starting folder.")
                 continue
 
+            filename = os.path.basename(copy.file)
+            i = 1
+            while file_exists(current_directory, filename):
+                filename = os.path.basename(copy.file) + "(" + str(i) + ")"
+                i += 1
+
             if os.path.isdir(copy.file):
                 print("folder", copy.parent.file, copy, current_directory.file)
-                copy_folder(copy.parent.file, copy.__str__(),
+                copy_folder(copy.file, filename,
                             current_directory.file)
             else:
                 print("file", copy.parent.file, copy, current_directory.file)
-                copy_file(copy.parent.file, copy.__str__(),
+                copy_file(copy.file, filename,
                           current_directory.file)
 
             if copy.was_cut is False:
