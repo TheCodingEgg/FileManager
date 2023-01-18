@@ -128,18 +128,14 @@ def delete_file(path, name):
 
 def delete_empty_folder(path, name):
     try:
-        os.chdir(path)
         os.rmdir(name)
-        os.chdir(dir_path)
     except FileNotFoundError as e:
         print(e, sys.stderr)
 
 
 def delete_full_folder(path, name):
     try:
-        os.chdir(path)
         shutil.rmtree(name)
-        os.chdir(dir_path)
     except FileNotFoundError as e:
         print(e, sys.stderr)
 
@@ -225,6 +221,12 @@ def get_input():
     return ret
 
 
+def rebuild():
+    tree1 = Tree(None, start)
+    add_dir(tree1, start)
+    return tree1
+
+
 def refresh(obj_temp):
     values_temp = obj_temp.get_children()
     window["-FILE LIST-"].update(values_temp)
@@ -254,9 +256,11 @@ while True:
     if event in (sg.WIN_CLOSED, 'Cancel'):
         break
     if event == "-FILE LIST-":
+        if len(values["-FILE LIST-"]) == 0:
+            continue
         obj = values["-FILE LIST-"][0]
         if obj.is_selected:
-            if len(obj.children) != 0:
+            if os.path.isdir(obj.file):
                 refresh(obj)
             obj.is_selected = False
         else:
@@ -267,18 +271,40 @@ while True:
             obj = obj.parent
             refresh(obj)
     if event == 'Rename':
+        if obj.parent.get_selected() is None:
+            continue
         path = obj.parent.file
         item = os.path.join(obj.parent.file, obj.parent.get_selected().__str__())
         if os.path.isdir(item):
             rename_folder(path, os.path.basename(item), get_input())
         else:
             rename_file(path, os.path.basename(item), get_input())
-        list_directories(start, 0)
-        tree1 = Tree(None, start)
-        add_dir(tree1, start)
-        tree = tree1
-        tree.print_tree()
+        tree = rebuild()
         obj = tree.find_file(obj.parent.file)
+        refresh(obj)
+    if event == 'Delete':
+        if obj.parent.get_selected() is None:
+            continue
+        path = obj.parent.file
+        item = os.path.join(obj.parent.file, obj.parent.get_selected().__str__())
+        if os.path.isdir(item):
+            delete_folder(path, os.path.basename(item))
+        else:
+            delete_file(path, os.path.basename(item))
+        tree = rebuild()
+        obj = tree.find_file(obj.parent.file)
+        refresh(obj)
+    if event == 'New File':
+        path = obj.file
+        create_file(path, get_input())
+        tree = rebuild()
+        obj = tree.find_file(obj.file)
+        refresh(obj)
+    if event == 'New Folder':
+        path = obj.file
+        create_folder(path, get_input())
+        tree = rebuild()
+        obj = tree.find_file(obj.file)
         refresh(obj)
 
 window.close()
