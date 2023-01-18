@@ -2,6 +2,7 @@ import os
 import sys
 import shutil
 import PySimpleGUI as sg
+import subprocess
 
 
 class Tree:
@@ -209,6 +210,7 @@ def get_input():
     window1 = sg.Window('Input Box', layout_input,
                         resizable=True, finalize=True)
     window1.close_destroys_window = True
+    ret = None
     while True:
         event1, values1 = window1.read()
         if event1 in (sg.WIN_CLOSED, 'Cancel'):
@@ -218,6 +220,20 @@ def get_input():
             break
     window1.close()
     return ret
+
+
+def message_box(message: str, window_title: str):
+    layout_message = [[sg.Text(message)], [sg.Button('Ok')]]
+    window2 = sg.Window(window_title, layout_message,
+                        resizable=True, finalize=True, size=(300, 80))
+    window2.close_destroys_window = True
+    while True:
+        event2, values2 = window2.read()
+        if event2 in (sg.WIN_CLOSED, 'Cancel'):
+            break
+        if event2 == 'Ok':
+            break
+    window2.close()
 
 
 def rebuild():
@@ -244,7 +260,7 @@ if __name__ == '__main__':
     names = tree.get_children()
     file_list_column = [
         [sg.Listbox(values=names, enable_events=True, size=(80, 40), key="-FILE LIST-",
-                    right_click_menu=['Unused', ['New Folder', 'New File', 'Cut', 'Copy', 'Delete', 'Rename', 'Paste']])],
+                    right_click_menu=['Unused', ['Open', 'New Folder', 'New File', 'Cut', 'Copy', 'Delete', 'Rename', 'Paste']])],
     ]
 
     button_column = [[sg.Button("UP", key="-UP-")], ]
@@ -291,10 +307,14 @@ if __name__ == '__main__':
             path = current_directory.file
             item = os.path.join(
                 path, current_directory.get_selected().__str__())
+            name = get_input()
+            if name is None or name == "":
+                message_box("You must input a name!", "Warning")
+                continue
             if os.path.isdir(item):
-                rename_folder(path, os.path.basename(item), get_input())
+                rename_folder(path, os.path.basename(item), name)
             else:
-                rename_file(path, os.path.basename(item), get_input())
+                rename_file(path, os.path.basename(item), name)
             tree = rebuild()
             current_directory = tree.find_file(current_directory.file)
             selected = None
@@ -317,7 +337,11 @@ if __name__ == '__main__':
 
         if event == 'New File':
             path = current_directory.file
-            create_file(path, get_input())
+            name = get_input()
+            if name is None or name == "":
+                message_box("You must input a name!", "Warning")
+                continue
+            create_file(path, name)
             tree = rebuild()
             current_directory = tree.find_file(current_directory.file)
             selected = None
@@ -325,7 +349,11 @@ if __name__ == '__main__':
 
         if event == 'New Folder':
             path = current_directory.file
-            create_folder(path, get_input())
+            name = get_input()
+            if name is None or name == "":
+                message_box("You must input a name!", "Warning")
+                continue
+            create_folder(path, name)
             tree = rebuild()
             current_directory = tree.find_file(current_directory.file)
             selected = None
@@ -379,5 +407,11 @@ if __name__ == '__main__':
                 selected = None
                 refresh(current_directory)
                 copy = None
+
+        if event == 'Open':
+            if not os.path.isdir(selected.file):
+                subprocess.Popen([selected.file], shell=True)
+            else:
+                message_box("Can't open a directory", "Warning")
 
     window.close()
