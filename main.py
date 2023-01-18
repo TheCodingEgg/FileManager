@@ -10,7 +10,7 @@ class Tree:
         self.children = []
         self.parent = parent
         self.is_selected = False
-        self.cut = False
+        self.was_cut = False
 
     def __str__(self):
         return os.path.basename(self.file)
@@ -316,7 +316,7 @@ while True:
         copy = obj
     if event == 'Cut':
         copy = obj
-        copy.cut = True
+        copy.was_cut = True
     if event == 'Paste':
         if copy is None:
             continue
@@ -333,7 +333,7 @@ while True:
                 obj = obj.parent
             print("file", copy.parent.file, copy, obj.file)
             copy_file(copy.parent.file, copy.__str__(), obj.file)
-        if copy.cut is False:
+        if copy.was_cut is False:
             tree = rebuild()
             obj = tree.find_file(obj.file)
             refresh(obj)
