@@ -1,5 +1,6 @@
 from math import sqrt
 import random
+import os
 
 import pygame
 from pygame.locals import (K_ESCAPE, KEYDOWN, MOUSEBUTTONDOWN, QUIT, K_a, K_d,
@@ -19,7 +20,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self):
         super(Player, self).__init__()
         self.surf = pygame.Surface((25, 25))
-        self.image = pygame.image.load(".\\Assets\\player.png").convert()
+        self.image = pygame.image.load(os.path.join(".", "Assets", "player.png")).convert() 
         self.rect = self.image.get_rect()
         self.pos = [(SCREEN_WIDTH - self.rect.width)/2,
                     (SCREEN_HEIGHT - self.rect.height)/2]
@@ -73,7 +74,7 @@ class Projectile(pygame.sprite.Sprite):
     def __init__(self, player, speed):
         super(Projectile, self).__init__()
         self.surf = pygame.Surface((5, 5))
-        self.image = pygame.image.load(".\\Assets\\bullet.png").convert()
+        self.image = pygame.image.load(os.path.join(".", "Assets", "bullet.png")).convert()
         self.rect = self.image.get_rect()
         self.speed = speed
         self.pos = [player.rect.centerx, player.rect.centery]
@@ -92,7 +93,7 @@ class Enemy(pygame.sprite.Sprite):
     def __init__(self):
         super(Enemy, self).__init__()
         self.surf = pygame.Surface((50, 50))
-        self.image = pygame.image.load(".\\Assets\\asteroid.png").convert()
+        self.image = pygame.image.load(os.path.join(".", "Assets", "asteroid.png")).convert()
         self.rect = self.image.get_rect()
         self.speed = 2
         self.pos = [random.randrange(
@@ -129,7 +130,7 @@ def game():
     difficulty = 64
     clock = pygame.time.Clock()
 
-    bkgd = pygame.image.load(".\\Assets\\background.jpg")
+    bkgd = pygame.image.load(os.path.join(".", "Assets", "background.jpg"))
 
     font = pygame.font.SysFont(None, 40)
     img = font.render(str(player.health), True, (0, 255, 0))
