@@ -252,11 +252,9 @@ def refresh(selected_temp):
 if __name__ == '__main__':
     start = "test"
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    print(dir_path)
     sg.theme('DarkAmber')
     tree = Tree(None, start)
     add_dir(tree, start)
-    tree.print_tree()
     names = tree.get_children()
     file_list_column = [
         [sg.Listbox(values=names, enable_events=True, size=(80, 40), key="-FILE LIST-",
@@ -381,11 +379,9 @@ if __name__ == '__main__':
                 i += 1
 
             if os.path.isdir(copy.file):
-                print("folder", copy.parent.file, copy, current_directory.file)
                 copy_folder(copy.file, filename,
                             current_directory.file)
             else:
-                print("file", copy.parent.file, copy, current_directory.file)
                 copy_file(copy.file, filename,
                           current_directory.file)
 
