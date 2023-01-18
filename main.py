@@ -349,7 +349,7 @@ if __name__ == '__main__':
             filename = os.path.basename(copy.file)
             i = 1
             while file_exists(current_directory, filename):
-                filename = os.path.basename(copy.file) + "(" + str(i) + ")"
+                filename = os.path.basename(copy.file) + " (" + str(i) + ")"
                 i += 1
 
             if os.path.isdir(copy.file):
