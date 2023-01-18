@@ -175,9 +175,11 @@ def game():
             enemies.append(x)
             dist = sqrt((player.pos[0] - x.pos[0]) * (player.pos[0] - x.pos[0]) +
                         (player.pos[1] - x.pos[1]) * (player.pos[1] - x.pos[1]))
-            #print(dist)
             if dist < SCREEN_WIDTH/6:
                 enemies.remove(x)     
+        if pygame.time.get_ticks() % 400 == 0:
+            difficulty -= 1
+            print(difficulty)
         img = font.render(str(player.health), True, (0, 255, 0))
         screen.blit(img, (0, 0))  
         pygame.display.flip()
