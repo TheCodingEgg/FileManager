@@ -12,6 +12,6 @@ RUN sudo apt update
 RUN sudo apt install python3-tk -y
 
 USER root
-RUN pip install PySimpleGUI
+RUN pip install PySimpleGUI pygame
 
 CMD ["python3", "./main.py"]
