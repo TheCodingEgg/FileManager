@@ -18,9 +18,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self):
         super(Player, self).__init__()
         self.surf = pygame.Surface((25, 25))
-        #self.surf.fill((0, 255, 0))
-        self.image = pygame.image.load("C:\\Projects\\Python\\player.png").convert()
-        #self.rect = self.surf.get_rect()
+        self.image = pygame.image.load(".\\Assets\\player.png").convert()
         self.rect = self.image.get_rect()
         self.pos = [(SCREEN_WIDTH - self.rect.width)/2 , (SCREEN_HEIGHT - self.rect.height)/2]
         self.health = 150
@@ -72,7 +70,7 @@ class Projectile(pygame.sprite.Sprite):
         super(Projectile, self).__init__()
         self.surf = pygame.Surface((5, 5))
         #self.surf.fill((0, 0, 255))
-        self.image = pygame.image.load("C:\\Projects\\Python\\bullet.png").convert()
+        self.image = pygame.image.load(".\\Assets\\bullet.png").convert()
         self.rect = self.image.get_rect()
         self.speed = speed
         self.pos = [player.rect.centerx, player.rect.centery]
@@ -90,7 +88,7 @@ class Enemy(pygame.sprite.Sprite):
         def __init__(self):
             super(Enemy, self).__init__()
             self.surf = pygame.Surface((50, 50))
-            self.image = pygame.image.load("C:\\Projects\\Python\\asteroid.png").convert()
+            self.image = pygame.image.load(".\\Assets\\asteroid.png").convert()
             self.rect = self.image.get_rect()
             self.speed = 2
             self.pos = [random.randrange(0, SCREEN_WIDTH), random.randrange(0, SCREEN_HEIGHT)]
@@ -113,77 +111,77 @@ class Enemy(pygame.sprite.Sprite):
             if rect2.colliderect(self):
                 enemies.remove(self)
                 
-            
-pygame.init()
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-player = Player()
-bullets = []
-enemies = []
-running = True
-ms_pos = (-1, -1)
-time = 0
-difficulty = 64
-clock = pygame.time.Clock()
+                
+if __name__ == '__main__':
+    pygame.init()
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    player = Player()
+    bullets = []
+    enemies = []
+    running = True
+    ms_pos = (-1, -1)
+    time = 0
+    difficulty = 64
+    clock = pygame.time.Clock()
 
-bkgd = pygame.image.load("C:\\Projects\\Python\\background.jpg")
+    bkgd = pygame.image.load(".\\Assets\\background.jpg")
 
-font = pygame.font.SysFont(None, 40)
-img = font.render(str(player.health), True, (0, 255, 0))
-
-while running:
-    for event in pygame.event.get():
-        if event.type == KEYDOWN:
-            if event.key == K_ESCAPE:
-                running = False
-        if event.type == MOUSEBUTTONDOWN:
-            ms_pos = pygame.mouse.get_pos()
-            bullets.append(Projectile(player, player.trajectory(ms_pos)))
-        elif event.type == QUIT:
-            running = False
-
-    screen.blit(bkgd, (0, 0)) 
-    pressed_keys = pygame.key.get_pressed() 
-    player.update(pressed_keys)
-    screen.blit(player.image, player.rect)
-    for enemy in enemies:
-        enemy.find_path(player)
-        screen.blit(enemy.image, enemy.rect)
-        if enemy.rect.colliderect(player) and player.immune == False:
-            player.health -= 50
-            player.immune = True
-            time = pygame.time.get_ticks()
-            print(player.health, time, player.immune)
-            if player.health <= 0:
-                running = False
-
-    if(pygame.time.get_ticks() - time > 512):
-        player.immune = False
-    
-    if(pygame.time.get_ticks() - time > 4096 and player.health < 150):
-        player.health += 50
-        if player.health > 150:
-            player.health = 150
-        
-    for bullet in bullets:
-        bullet.update()
-        screen.blit(bullet.image, bullet.rect)
-        if bullet.rect.collidelist(enemies) != -1:
-            enemies.remove(enemies[bullet.rect.collidelist(enemies)])
-            bullets.remove(bullet)
-        if screen.get_rect().contains(bullet.rect) == False:
-            bullets.remove(bullet)
-            
-    if pygame.time.get_ticks() % difficulty == 0:
-        x = Enemy()
-        enemies.append(x)
-        dist = sqrt((player.pos[0] - x.pos[0]) * (player.pos[0] - x.pos[0]) +
-                    (player.pos[1] - x.pos[1]) * (player.pos[1] - x.pos[1]))
-        #print(dist)
-        if dist < SCREEN_WIDTH/6:
-            enemies.remove(x)     
+    font = pygame.font.SysFont(None, 40)
     img = font.render(str(player.health), True, (0, 255, 0))
-    screen.blit(img, (0, 0))  
-    pygame.display.flip()
-    clock.tick(60)
 
-print("Your score is", pygame.time.get_ticks())
+    while running:
+        for event in pygame.event.get():
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    running = False
+            if event.type == MOUSEBUTTONDOWN:
+                ms_pos = pygame.mouse.get_pos()
+                bullets.append(Projectile(player, player.trajectory(ms_pos)))
+            elif event.type == QUIT:
+                running = False
+
+        screen.blit(bkgd, (0, 0)) 
+        pressed_keys = pygame.key.get_pressed() 
+        player.update(pressed_keys)
+        screen.blit(player.image, player.rect)
+        for enemy in enemies:
+            enemy.find_path(player)
+            screen.blit(enemy.image, enemy.rect)
+            if enemy.rect.colliderect(player) and player.immune == False:
+                player.health -= 50
+                player.immune = True
+                time = pygame.time.get_ticks()
+                print(player.health, time, player.immune)
+                if player.health <= 0:
+                    running = False
+
+        if(pygame.time.get_ticks() - time > 512):
+            player.immune = False
+        
+        if(pygame.time.get_ticks() - time > 4096 and player.health < 150):
+            player.health += 50
+            if player.health > 150:
+                player.health = 150
+            
+        for bullet in bullets:
+            bullet.update()
+            screen.blit(bullet.image, bullet.rect)
+            if bullet.rect.collidelist(enemies) != -1:
+                enemies.remove(enemies[bullet.rect.collidelist(enemies)])
+                bullets.remove(bullet)
+            if screen.get_rect().contains(bullet.rect) == False:
+                bullets.remove(bullet)
+                
+        if pygame.time.get_ticks() % difficulty == 0:
+            x = Enemy()
+            enemies.append(x)
+            dist = sqrt((player.pos[0] - x.pos[0]) * (player.pos[0] - x.pos[0]) +
+                        (player.pos[1] - x.pos[1]) * (player.pos[1] - x.pos[1]))
+            #print(dist)
+            if dist < SCREEN_WIDTH/6:
+                enemies.remove(x)     
+        img = font.render(str(player.health), True, (0, 255, 0))
+        screen.blit(img, (0, 0))  
+        pygame.display.flip()
+        clock.tick(60)
+    print("Your score is", pygame.time.get_ticks())
