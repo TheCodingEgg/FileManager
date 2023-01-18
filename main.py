@@ -340,7 +340,14 @@ if __name__ == '__main__':
             if name is None or name == "":
                 message_box("You must input a name!", "Warning")
                 continue
-            create_file(path, name)
+
+            filename = name
+            i = 1
+            while file_exists(current_directory, filename):
+                filename = name + " (" + str(i) + ")"
+                i += 1
+
+            create_file(path, filename)
             tree = rebuild()
             current_directory = tree.find_file(current_directory.file)
             selected = None
@@ -352,7 +359,14 @@ if __name__ == '__main__':
             if name is None or name == "":
                 message_box("You must input a name!", "Warning")
                 continue
-            create_folder(path, name)
+
+            filename = name
+            i = 1
+            while file_exists(current_directory, filename):
+                filename = name + " (" + str(i) + ")"
+                i += 1
+
+            create_folder(path, filename)
             tree = rebuild()
             current_directory = tree.find_file(current_directory.file)
             selected = None
@@ -391,7 +405,6 @@ if __name__ == '__main__':
                 current_directory = tree.find_file(current_directory.file)
                 selected = None
                 refresh(current_directory)
-
             else:
                 path = copy.parent.file
                 item = os.path.join(path, copy.__str__())
