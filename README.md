@@ -13,9 +13,9 @@ It can be run either
 
 ***CONTAINERISED***
 - install docker
-- ```docker pull accetto/ubuntu-vnc-xfce-python-g3
-docker build -f <path_to_dockerfile> -t filemanager .
-docker run --name ubvnc -p 25901:5901 -p 26901:6901 filemanager```
+- ```docker pull accetto/ubuntu-vnc-xfce-python```
+- ```docker build -f <path_to_dockerfile> -t filemanager .```
+- ```docker run --name ubvnc -p 25901:5901 -p 26901:6901 filemanager```
 
 - go to http://localhost:26901/vnc_lite.html (password is headless)
 
@@ -27,4 +27,5 @@ de dependency management.
 
 Dificultăți întâmpinate: tiparea slabă a limbajului pyton și viteza comparativ
 înceată cu a unui limbaj compilat. Layouturile din PySimpleGUI au dat bătăi de cap.
-A constituit o dificultate mare să containerizez un app cu GUI în docker. 
+Exception handlingul face uneori aplicația să dea crash.
+A constituit o dificultate mare să containerizez un app cu GUI în docker.
