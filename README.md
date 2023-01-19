@@ -19,13 +19,8 @@ It can be run either
 
 - go to http://localhost:26901/vnc_lite.html (password is headless)
 
-Contribuțiile fiecărui membru:
-- Alex și Andrei au lucrat pe GUI și logica filetreeului. Alex a făcut arhitectura
-inițială și Andrei a făcut overhaul pe anumitea aspecte.
-- Luca a făcut ceva testing și a dockerizat appul, a scris READMEul și s-a ocupat
-de dependency management.
+Contributions from each member:
 
-Dificultăți întâmpinate: tiparea slabă a limbajului pyton și viteza comparativ
-înceată cu a unui limbaj compilat. Layouturile din PySimpleGUI au dat bătăi de cap.
-Exception handlingul face uneori aplicația să dea crash.
-A constituit o dificultate mare să containerizez un app cu GUI în docker.
+Alex and Andrei worked on GUI and filetree logic. Alex did the initial architecture and Andrei did the overhaul on some aspects.
+Luca did some testing and dockerized the app, wrote the README and handled dependency management.
+Difficulties encountered: poor typing of the pyton language and comparatively slow speed compared to a compiled language. The layouts in PySimpleGUI were a headache. Exception handling sometimes makes the application crash. It was a big difficulty to containerize a GUI app in docker.
