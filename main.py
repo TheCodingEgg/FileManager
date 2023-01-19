@@ -426,7 +426,10 @@ if __name__ == '__main__':
             if selected is None:
                 continue
             if not os.path.isdir(selected.file):
-                subprocess.Popen([selected.file], shell=True)
+                if os.name == 'nt':
+                    subprocess.Popen([selected.file], shell=True)
+                else:
+                    os.system('xdg-open "%s"' % selected.file)
             else:
                 message_box("Can't open a directory", "Warning")
 
