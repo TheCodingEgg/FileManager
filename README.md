@@ -6,7 +6,7 @@ using PySimpleGUI (a minigame written in pygame is embedded as a fun side-activi
 It can be run either
 
 ***NATIVELY***
-- install Python with Tkinter (under Ubuntu, ```sudo apt install python3 python3-tkinter```)
+- install Python with Tkinter (under Ubuntu, ```sudo apt install python3 python3-tk```)
 - clone our repo ```git clone https://github.com/AlexandruPites/FileManager.git```
 - run ```pip install -r requirements.txt```
 - in the repo root run ```python3 main.py``` (under Linux) or ```py main.py``` (under Windows)
