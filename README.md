@@ -8,12 +8,11 @@ It can be run either
 ***NATIVELY***
 - install Python with Tkinter (under Ubuntu, ```sudo apt install python3 python3-tkinter```)
 - clone our repo ```git clone https://github.com/AlexandruPites/FileManager.git```
-- run ```pip install requirements.txt```
+- run ```pip install -r requirements.txt```
 - in the repo root run ```python3 main.py``` (under Linux) or ```py main.py``` (under Windows)
 
 ***CONTAINERISED***
 - install docker
-- ```docker pull accetto/ubuntu-vnc-xfce-python```
 - ```docker build -f <path_to_dockerfile> -t filemanager .```
 - ```docker run --name ubvnc -p 25901:5901 -p 26901:6901 filemanager```
 
